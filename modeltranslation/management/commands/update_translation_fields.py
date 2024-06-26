@@ -99,6 +99,7 @@ class Command(BaseCommand):
                 if field.empty_strings_allowed:  # type: ignore[union-attr]
                     q |= Q(**{def_lang_fieldname: ""})
 
-                model._default_manager.filter(q).rewrite(False).order_by().update(  # type: ignore[attr-defined]
+                # Exclude is used to ignore updating those whose field values are blank/empty strings
+                model._default_manager.filter(q).rewrite(False).exclude(  # type: ignore[attr-defined]
                     **{def_lang_fieldname: F(field_name)}
-                )
+                ).order_by().update(**{def_lang_fieldname: F(field_name)})
