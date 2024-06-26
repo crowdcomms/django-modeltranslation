@@ -100,6 +100,8 @@ class Command(BaseCommand):
                     q |= Q(**{def_lang_fieldname: ""})
 
                 # Exclude is used to ignore updating those whose field values are blank/empty strings
-                model._default_manager.filter(q).rewrite(False).exclude(**{def_lang_fieldname: F(field_name)}).order_by().update(  # type: ignore[attr-defined]
+                model._default_manager.filter(q).rewrite(False).exclude(
+                    **{def_lang_fieldname: F(field_name)}
+                ).order_by().update(  # type: ignore[attr-defined]
                     **{def_lang_fieldname: F(field_name)}
                 )
